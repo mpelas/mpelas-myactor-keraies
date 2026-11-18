@@ -368,6 +368,8 @@ class GreekAntennaScraper:
 
 async def main():
     async with Actor:
+        # One-time per-run charge event (pay-per-event monetization; no-op locally)
+        await Actor.charge('run_started')
         Actor.log.info("Starting Greek Antenna Scraper - Two Stage Process")
         
         scraper = GreekAntennaScraper()

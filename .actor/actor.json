@@ -1,17 +1,17 @@
 {
-	"actorSpecification": 1,
-	"name": "keraies-v2",
-	"title": "Registered Antennas Scraper (keraies.eett.gr) v2",
-	"description": "Scrapes Greece's registered antenna registry (keraies.eett.gr): collects antennas per municipality, fetches full details (address, coordinates, company, permit status, documents), with pagination, concurrency control and pay-per-event monetization ($0.005 per antenna).",
-	"version": "2.0",
-	"buildTag": "latest",
-	"meta": {
-		"generatedBy": "mistral-large-4-0"
-	},
-	"input": "./input_schema.json",
-	"output": "./output_schema.json",
-	"storages": {
-		"dataset": "./dataset_schema.json"
-	},
-	"dockerfile": "../Dockerfile"
+    "actorSpecification": 1,
+    "name": "keraies-v2",
+    "title": "Registered Antennas Scraper (keraies.eett.gr) v2",
+    "description": "Scrapes Greece's registered antenna registry (keraies.eett.gr): collects antennas per municipality, fetches full details (address, coordinates, company, permit status, documents), with pagination, concurrency control and pay-per-event monetization ($0.005 per antenna).",
+    "version": "2.0.1",
+    "buildTag": "latest",
+    "meta": {
+        "generatedBy": "mistral-large-4-0"
+    },
+    "input": "./input_schema.json",
+    "output": "./output_schema.json",
+    "storages": {
+        "dataset": "./dataset_schema.json"
+    },
+    "dockerfile": "../Dockerfile"
 }
