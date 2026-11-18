@@ -1,0 +1,11 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "Keraies antennas scraper v2 output",
+    "properties": {
+        "dataset": {
+            "type": "string",
+            "title": "Antennas dataset",
+            "template": "{{links.apiDefaultDatasetUrl}}/items?view=overview"
+        }
+    }
+}

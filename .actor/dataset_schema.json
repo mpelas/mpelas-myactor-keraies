@@ -1,0 +1,44 @@
+{
+    "actorSpecification": 1,
+    "fields": {
+        "type": "object",
+        "properties": {
+            "antenna_id": {"type": ["string", "null"]},
+            "serial_number": {"type": ["string", "null"]},
+            "code": {"type": ["string", "null"]},
+            "category": {"type": ["string", "null"]},
+            "company": {"type": ["string", "null"]},
+            "address": {"type": ["string", "null"]},
+            "municipality": {"type": ["string", "null"]},
+            "position_code": {"type": ["integer", "null"]},
+            "code_name": {"type": ["string", "null"]},
+            "region": {"type": ["string", "null"]},
+            "latitude": {"type": ["number", "null"]},
+            "longitude": {"type": ["number", "null"]},
+            "permit_status": {"type": ["string", "null"]},
+            "documents": {"type": "array"}
+        }
+    },
+    "views": {
+        "overview": {
+            "title": "Antennas",
+            "transformation": {
+                "fields": ["antenna_id", "serial_number", "company", "municipality", "address", "latitude", "longitude", "permit_status", "category"]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "antenna_id": {"label": "Antenna ID", "format": "text"},
+                    "serial_number": {"label": "Serial", "format": "text"},
+                    "company": {"label": "Company", "format": "text"},
+                    "municipality": {"label": "Municipality", "format": "text"},
+                    "address": {"label": "Address", "format": "text"},
+                    "latitude": {"label": "Lat", "format": "number"},
+                    "longitude": {"label": "Lng", "format": "number"},
+                    "permit_status": {"label": "Permit status", "format": "text"},
+                    "category": {"label": "Category", "format": "text"}
+                }
+            }
+        }
+    }
+}

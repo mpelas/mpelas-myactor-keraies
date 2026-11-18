@@ -1,0 +1,36 @@
+{
+    "title": "Keraies antennas scraper v2 - Input",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "municipalities": {
+            "title": "Municipalities",
+            "type": "array",
+            "description": "Greek municipality names to search (e.g. Αθηναίων, Θεσσαλονίκης). Leave empty for defaults.",
+            "editor": "stringList",
+            "prefill": ["Αθηναίων", "Θεσσαλονίκης", "Αλεξανδρούπολης"]
+        },
+        "max_antennas": {
+            "title": "Max antennas (0 = unlimited)",
+            "type": "integer",
+            "description": "Cap on total antennas processed in stage 2 (cost control). 0 means no cap.",
+            "default": 200,
+            "minimum": 0
+        },
+        "max_concurrency": {
+            "title": "Max detail-fetch concurrency",
+            "type": "integer",
+            "description": "Parallel detail requests in stage 2 (1-10)",
+            "default": 5,
+            "minimum": 1,
+            "maximum": 10
+        },
+        "request_delay_seconds": {
+            "title": "Delay between detail requests (seconds)",
+            "type": "number",
+            "description": "Politeness delay per detail request",
+            "default": 0.5,
+            "minimum": 0
+        }
+    }
+}

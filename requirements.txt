@@ -1,0 +1,13 @@
+# Core Apify SDK - version 3.x
+apify==3.0.4
+
+# HTML parsing
+beautifulsoup4==4.14.2
+lxml>=4.9.0
+
+# HTTP clients
+aiohttp>=3.8.0
+httpx
+
+# Type hints
+types-beautifulsoup4
