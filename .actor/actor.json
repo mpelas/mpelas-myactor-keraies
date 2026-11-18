@@ -3,7 +3,7 @@
     "name": "keraies-v2",
     "title": "Registered Antennas Scraper (keraies.eett.gr) v2",
     "description": "Scrapes Greece's registered antenna registry (keraies.eett.gr): collects antennas per municipality, fetches full details (address, coordinates, company, permit status, documents), with pagination, concurrency control and pay-per-event monetization ($0.005 per antenna).",
-    "version": "2.0.1",
+    "version": "2.1",
     "buildTag": "latest",
     "meta": {
         "generatedBy": "mistral-large-4-0"
