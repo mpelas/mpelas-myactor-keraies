@@ -8,13 +8,13 @@
             "type": "array",
             "description": "Greek municipality names to search (e.g. Αθηναίων, Θεσσαλονίκης). Leave empty for defaults.",
             "editor": "stringList",
-            "prefill": ["Αθηναίων", "Θεσσαλονίκης", "Αλεξανδρούπολης"]
+            "prefill": ["Αίγινας"]
         },
         "max_antennas": {
             "title": "Max antennas (0 = unlimited)",
             "type": "integer",
-            "description": "Cap on total antennas processed in stage 2 (cost control). 0 means no cap.",
-            "default": 200,
+            "description": "Cap on total antennas processed in stage 2 (cost control). 0 means no cap. Kept small by default so Apify Store daily tests finish within 5 minutes; raise it for full cycles.",
+            "default": 25,
             "minimum": 0
         },
         "max_concurrency": {
@@ -29,8 +29,15 @@
             "title": "Delay between detail requests (seconds)",
             "type": "number",
             "description": "Politeness delay per detail request",
-            "default": 0.5,
+            "default": 0.2,
             "minimum": 0
+        },
+        "proxy_configuration": {
+            "title": "Proxy configuration",
+            "type": "object",
+            "description": "Proxy settings for the HTTP requests (Apify Proxy residential recommended)",
+            "editor": "proxy",
+            "default": {"useApifyProxy": false}
         }
     }
 }

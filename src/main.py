@@ -81,12 +81,12 @@ class GreekAntennaScraper:
             "Priority": "u=0, i"
         }
 
-    async def make_request_with_retry(self, session: ClientSession, url: str, data: Dict, max_retries: int = 6) -> Optional[aiohttp.ClientResponse]:
+    async def make_request_with_retry(self, session: ClientSession, url: str, data: Dict, max_retries: int = 6, proxy: Optional[str] = None) -> Optional[aiohttp.ClientResponse]:
         """Make HTTP request with retry mechanism."""
         for attempt in range(max_retries):
             try:
                 timeout = ClientTimeout(total=600)
-                async with session.post(url, headers=self.headers, data=data, timeout=timeout) as response:
+                async with session.post(url, headers=self.headers, data=data, timeout=timeout, proxy=proxy) as response:
                     if response.status == 200:
                         content = await response.read()
                         response._content = content
@@ -148,13 +148,13 @@ class GreekAntennaScraper:
                 }
         return None
 
-    async def get_antenna_details(self, session: ClientSession, antenna_id: str) -> Dict[str, Any]:
+    async def get_antenna_details(self, session: ClientSession, antenna_id: str, proxy: Optional[str] = None) -> Dict[str, Any]:
         """Get detailed information for a specific antenna."""
         Actor.log.info(f"Getting details for antenna ID: {antenna_id}")
         
         data = {"appId": antenna_id}
         
-        response = await self.make_request_with_retry(session, self.details_url, data)
+        response = await self.make_request_with_retry(session, self.details_url, data, proxy=proxy)
         if not response:
             Actor.log.error(f"Failed to get details for antenna {antenna_id}")
             return {"antenna_id": antenna_id, "error": "Failed to fetch details"}
@@ -258,7 +258,7 @@ class GreekAntennaScraper:
 
         return antenna_data_list
 
-    async def collect_all_antenna_ids_from_municipality(self, session: ClientSession, municipality: str) -> List[Dict[str, Any]]:
+    async def collect_all_antenna_ids_from_municipality(self, session: ClientSession, municipality: str, proxy: Optional[str] = None) -> List[Dict[str, Any]]:
         """Collect all antenna IDs from all pages of a municipality."""
         all_antenna_data = []
         page = 1
@@ -279,7 +279,7 @@ class GreekAntennaScraper:
         while True:
             Actor.log.info(f"Collecting antenna IDs from {municipality}, page {page}")
             
-            response = await self.make_request_with_retry(session, self.search_url, data)
+            response = await self.make_request_with_retry(session, self.search_url, data, proxy=proxy)
             if not response:
                 Actor.log.error(f"Failed to get page {page} for {municipality}")
                 break
@@ -378,6 +378,17 @@ async def main():
         max_antennas = int(actor_input.get('max_antennas', 0) or 0)  # 0 = unlimited
         max_concurrency = max(1, min(10, int(actor_input.get('max_concurrency', 5))))
         delay = max(0.0, float(actor_input.get('request_delay_seconds', 0.5)))
+
+        proxy_url = None
+        proxy_input = actor_input.get('proxy_configuration')
+        if proxy_input:
+            try:
+                proxy_config = await Actor.create_proxy_configuration(actor_proxy_input=proxy_input)
+                if proxy_config is not None:
+                    proxy_url = await proxy_config.new_url()
+                    Actor.log.info('Proxy configuration created from input.')
+            except Exception as e:
+                Actor.log.warning(f'Could not create proxy configuration, continuing direct: {e}')
         if max_antennas > 0:
             Actor.log.info(f'Capping run at {max_antennas} antennas (max_antennas input)')
         Actor.log.info(f"Will scrape {len(municipalities)} municipalities: {municipalities}")
@@ -391,7 +402,7 @@ async def main():
             
             for municipality in municipalities:
                 Actor.log.info(f"Collecting antenna IDs from municipality: {municipality}")
-                municipality_antenna_data = await scraper.collect_all_antenna_ids_from_municipality(session, municipality)
+                municipality_antenna_data = await scraper.collect_all_antenna_ids_from_municipality(session, municipality, proxy=proxy_url)
                 
                 # Add to our collection and track unique IDs
                 for antenna_data in municipality_antenna_data:
@@ -415,7 +426,7 @@ async def main():
 
             async def process_one(basic_data):
                 async with semaphore:
-                    detailed_data = await scraper.get_antenna_details(session, basic_data['antenna_id'])
+                    detailed_data = await scraper.get_antenna_details(session, basic_data['antenna_id'], proxy=proxy_url)
                     await asyncio.sleep(delay)
                     return {**basic_data, **detailed_data}
 
